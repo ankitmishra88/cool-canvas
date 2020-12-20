@@ -11,6 +11,15 @@ const getRandomColor = () => {
     const randomColor = Math.floor(Math.random()*16777215).toString(16);
     return "#" + randomColor;
   }
+  var mouse={
+    x:undefined,
+    y:undefined
+  }
+  //Event Listener On Mouse Move
+  window.addEventListener('mousemove',function(event){
+      mouse.x=event.clientX
+      mouse.y=event.clientY
+  })
   
 const Circle=function(x,y,radius,dy,dx,blinkrad=false){
         this.x=x
@@ -27,10 +36,15 @@ const Circle=function(x,y,radius,dy,dx,blinkrad=false){
           c.arc(this.x,this.y,this.radius,0,this.angle*Math.PI,false)
           c.fillStyle=getRandomColor()
           c.fill()
-          this.update()
+          
+        }
+        this.update=function(){
+          this.x=mouse.x
+          this.y=mouse.y
+          this.draw()
         }
 
-        this.update=function(){
+        this.move=function(){
           //this.radius=Math.random()*20
           this.x+=this.dx
           this.y+=this.dy
@@ -38,6 +52,7 @@ const Circle=function(x,y,radius,dy,dx,blinkrad=false){
               this.dx=-this.dx
           if(this.y+this.radius>innerHeight||this.y-this.radius<0)
               this.dy=-this.dy
+          this.draw()
         }
         this.blink=function(){
           if(this.blinkrad){
@@ -56,17 +71,18 @@ for(let i=0;i<size;i++){
         let dy=(Math.random()-0.5)*8   
         circleArr.push(new Circle(x,y,20,dx,dy,20))  
 }
-//console.log(x)
-let radius=40
+  let cursor=new Circle(innerWidth/2,innerHeight/2,100,0,0,100)
   function animate(){
       requestAnimationFrame(animate)
       canvas.width=innerWidth
       canvas.height=innerHeight
       c.clearRect(0,0,innerWidth,innerHeight)
       for(let i=0;i<size;i++){
-        circleArr[i].draw()
+        circleArr[i].move()
         circleArr[i].blink()
       }
+      cursor.update()
+      cursor.blink()
      
       
       
