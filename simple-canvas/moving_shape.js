@@ -30,6 +30,7 @@ const Circle=function(x,y,radius,dy,dx){
         }
 
         this.update=function(){
+          this.radius=Math.random()*20
           this.x+=this.dx
           this.y+=this.dy
           if(this.x+this.radius>innerWidth||this.x-this.radius<0)
